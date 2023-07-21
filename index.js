@@ -107,7 +107,7 @@ app.get('/create', async (req, res) => {
 app.get('/delete/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const animesRaiz = JSON.parce(await fs.readFile(__dirname + '/animes.json'));
+        const animesRaiz = JSON.parse(await fs.readFile(__dirname + '/animes.json'));
         delete animesRaiz[id];
         await fs.writeFile(__dirname + '/animes.json', JSON.stringify(animesRaiz));
         res.status(201).json(animesRaiz);
@@ -121,3 +121,7 @@ app.get('/delete/:id', async (req, res) => {
     res.end();
 });
 app.listen(PORT, () => console.log(`Iniciando en el puerto ${PORT}`));
+
+module.exports = {
+    app
+};
