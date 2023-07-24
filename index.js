@@ -2,8 +2,31 @@ const express = require('express');
 const app = express();
 const { v4:uuidv4 } = require('uuid');
 const fs = require('fs/promises');
+const exphbs = require('express-handlebars').create({
+    extname: '.hbs',
+});
+
 
 const PORT = 3000;
+
+app.use(express.static('public'));
+app.engine('.hbs', exphbs.engine);
+app.set('view engine', 'hbs');
+
+
+app.get('/', async (req, res) => {
+    try {
+        const animesRaiz = JSON.parse(await fs.readFile(__dirname + '/animes.json'));
+        res.render('index', { animes: Object.values(animesRaiz) });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'ERROR',
+            message: error.message
+        });
+    }
+});
+
 // http://localhost:3000/
 
 app.get('/', async (req, res) => {
